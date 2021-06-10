@@ -40,12 +40,12 @@ Command:
 ```bash
 mkdir -p ~/.terraform.d/plugins/hashicorp.com/edu/docusign/0.2.0/[OS_ARCH]
 ```
-For eg. `mkdir -p ~/.terraform.d/plugins/hashicorp.com/edu/docusign/0.2.0/windows_amd64`<br>
+For eg. `mkdir -p ~/.terraform.d/plugins/terraform/provider/docusign/0.2.0/windows_amd64`<br>
 
 2. Run `go build -o terraform-provider-docusign.exe`. This will save the binary (`.exe`) file in the main/root directory. <br>
 3. Run this command to move this binary file to appropriate location.
  ```
- move terraform-provider-docusign.exe %APPDATA%\terraform.d\plugins\hashicorp.com\edu\docusign\0.2.0\[OS_ARCH]
+ move terraform-provider-docusign.exe %APPDATA%\terraform.d\plugins\terraform\provider\docusign\0.2.0\[OS_ARCH]
  ``` 
 Otherwise you can manually move the file from current directory to destination directory.<br>
 
@@ -87,7 +87,7 @@ terraform {
   required_providers {
     docusign = {
       version = "0.2"
-      source  = "hashicorp.com/edu/docusign"
+      source  = "terraform/provider/docusign"
     }
   }
 }

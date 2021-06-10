@@ -2,7 +2,7 @@ terraform {
   required_providers {
     docusign = {
       version = "0.2"
-      source  = "hashicorp.com/edu/docusign"
+      source  = "terraform/provider/docusign"
     }
   }
 }
