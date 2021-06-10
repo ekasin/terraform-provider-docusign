@@ -10,7 +10,7 @@ This terraform provider allows to perform Create ,Read ,Update, Delete and Impor
 * [Docusign Rest API](https://developers.docusign.com/docs/esign-rest-api/reference/) 
 
 
-## Docusign Setup
+## Application Setup
  :heavy_exclamation_mark:  [IMPORTANT] : This provider can be successfully tested on any dcosign developer account. <br><br>
 
 1. Create a docusign account with your required subscription (PRO Plan/Business Account). (https://www.docusign.com/products-and-pricing)<br>
@@ -21,9 +21,9 @@ This terraform provider allows to perform Create ,Read ,Update, Delete and Impor
 This app will provide us with the token and accountid which will be needed to configure our provider and make request. <br>
 
 
-## Initialise Docusign Provider in local machine 
+## Building the Providers 
 1. Clone the repository  to $GOPATH/src/github.com/docusign/terraform-provider-docusign <br>
-2. Add the Refresh token generted in  Docusign App to respective fields in `main.tf` <br>
+2. Add the Refresh token generted in  Docusign App to respective fields as shown in example usage <br>
 3. Run the following command :
  ```golang
 go mod init terraform-provider-docusign
@@ -59,24 +59,24 @@ Otherwise you can manually move the file from current directory to destination d
 ## Working with terraform
 
 #### Create User
-1. Add the user email, first name, last name, job_title, company in the respective field in `main.tf`
+1. Add the user email, first name, last name, job_title, company in the respective field in resourcse block(refer example usage)
 2. Initialize the terraform provider `terraform init`
 3. Check the changes applicable using `terraform plan` and apply using `terraform apply`
 4. You will see that a user has been successfully created and an account activation mail has been sent to the user.
 5. Activate the account using the link provided in the mail.
 
 #### Update the user
-Update the data of the user in the `main.tf` file and apply using `terraform apply`
+Update the data of the user in the resourcse block and apply using `terraform apply`
 
 #### Read the User Data
-Add data and output blocks in the `main.tf` file and run `terraform plan` to read user data
+Add data and output blocks and run `terraform plan` to read user data
 
 
 #### Delete the user
-Delete the resource block of the particular user from `main.tf` file and run `terraform apply`.
+Delete the resource block of the particular user file and run `terraform apply` or run `terraform destroy`.
 
 #### Import a User Data
-1. Write manually a resource configuration block for the User in `main.tf`, to which the imported object will be mapped.
+1. Write manually a resource configuration block for the User(refer resourcse block), to which the imported object will be mapped.
 2. Run the command `terraform import docusign_user.user1 [EMAIL_ID]`
 3. Check for the attributes in the `.tfstate` file and fill them accordingly in resource block.
 
