@@ -1,4 +1,3 @@
-# Terraform Docusign Provider
 
 This terraform provider allows to perform Create ,Read ,Update, Delete and Import docusign User(s). 
 
@@ -7,7 +6,8 @@ This terraform provider allows to perform Create ,Read ,Update, Delete and Impor
 
 * [Go](https://golang.org/doc/install) 1.16 <br>
 * [Terraform](https://www.terraform.io/downloads.html) 0.13.x <br/>
-* [Docusign](https://developers.docusign.com/) Developers account 
+* [Docusign](https://developers.docusign.com/) Developers account
+* [Docusign Rest API](https://developers.docusign.com/docs/esign-rest-api/reference/) 
 
 
 ## Docusign Setup
@@ -71,8 +71,6 @@ Update the data of the user in the `main.tf` file and apply using `terraform app
 #### Read the User Data
 Add data and output blocks in the `main.tf` file and run `terraform plan` to read user data
 
-#### Activate/Deactivate the user
-No API for activate,deactive.
 
 #### Delete the user
 Delete the resource block of the particular user from `main.tf` file and run `terraform apply`.
@@ -81,13 +79,6 @@ Delete the resource block of the particular user from `main.tf` file and run `te
 1. Write manually a resource configuration block for the User in `main.tf`, to which the imported object will be mapped.
 2. Run the command `terraform import docusign_user.user1 [EMAIL_ID]`
 3. Check for the attributes in the `.tfstate` file and fill them accordingly in resource block.
-
-
-### Testing the Provider
-1. Navigate to the test file directory.
-2. Run command `go test` . This command will give combined test result for the execution or errors if any failure occur.
-3. If you want to see test result of each test function individually while running test in a single go, run command `go test -v`
-4. To check test cover run `go test -cover`
 
 
 ## Example Usage
@@ -102,29 +93,28 @@ terraform {
 }
 
 provider "docusign" {
-  secretkey = ""
-  integrationkey = ""
-  refresh token = ""
-  accountid = ""
+  secretkey = "rwetwuytrqweyr"
+  integrationkey = "gdfjhsdfjdf"
+  refresh token = "dgfshdgfsdh"
+  accountid = "dhfhglsdhfljsdh"
 }
 
 resource "docusign_user" "user1" {
-   email      = "[EMAIL_ID]"
-   firstname = "[USER_FIRST_NAME]"
-   lastname  = "[USER_LAST_NAME]"
-   jobtitle  = "[USER_JOB_TITLE]"
-   company = "[USER_COMPANY]"
+   email      = "user@gmail.com"
+   firstname = "usersfirstname"
+   lastname  = "userslastname"
+   jobtitle  = "engineer"
+   company = "clevertap"
 }
 
 data "docusign_user" "user1" {
-  email = "[EMAIL_ID]"
+  email = "user@gmail.com"
 }
 
 output "user1" {
   value = data.docusign_user.user1
 }
 ```
-
 
 ## Argument Reference
 
