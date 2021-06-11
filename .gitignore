@@ -1,0 +1,16 @@
+terraform.tfstate*
+.terraform*
+terraform-provider-*
+vendor/
+credentials.json
+*.exe
+*.tf
+*.iml
+*.terraform*
+*.terraform/
+planfile*
+*tfstate*
+*.tfplan*
+*backend.config
+errored.tfstate
+*.idea
