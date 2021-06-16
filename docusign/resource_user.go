@@ -34,16 +34,6 @@ func validateValue(v interface{}, k string) (ws []string, es []error) {
 		errs = append(errs, fmt.Errorf("value not to be empty"))
 		return warns, errs
 	}
-	whiteSpace := regexp.MustCompile(`\s+`)
-	if whiteSpace.Match([]byte(value)) {
-		errs = append(errs, fmt.Errorf("name cannot contain whitespace. Got %s", value))
-		return warns, errs
-	}
-	nameRegex := regexp.MustCompile("^[A-Za-z]\\w{5,29}$")
-	if !(nameRegex.MatchString(k)) {
-		errs = append(errs, fmt.Errorf("Expected name is not valid .Got %s", value))
-		return warns, errs
-	}
 	return
 }
 
@@ -54,7 +44,7 @@ func resourceUser() *schema.Resource {
 		UpdateContext: resourceUserUpdate,
 		DeleteContext: resourceUserDelete,
 		Importer: &schema.ResourceImporter{
-			State: schema.ImportStatePassthrough,
+			StateContext: resourceUserImporter,
 		},
 		Schema: map[string]*schema.Schema{
 
@@ -172,4 +162,23 @@ func resourceUserDelete(ctx context.Context,d *schema.ResourceData, m interface{
 	}
 	d.SetId("")
 	return diags
+}
+
+func resourceUserImporter(ctx context.Context, d *schema.ResourceData, m interface{}) ([]*schema.ResourceData, error) {
+	apiClient := m.(*client.Client)
+	userId := d.Id()
+	user, err := apiClient.GetUser(userId)
+	if err != nil {
+		return nil,err
+	}
+	if len(user.Email) > 0{
+		d.SetId(user.Email)
+		d.Set("email", user.Email)
+		d.Set("firstname", user.FirstName)
+		d.Set("lastname", user.LastName)
+		d.Set("jobtitle", user.JobTitle)
+		d.Set("company", user.Company)
+		d.Set("permissionprofilename", user.PermissionProfileName)
+	}
+	return []*schema.ResourceData{d}, nil
 }

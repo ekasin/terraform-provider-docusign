@@ -193,7 +193,7 @@ func (c *Client) GetUser(email string) (*User, error) {
 func (c *Client) gethttpRequest(email string, method string, body bytes.Buffer) (closer io.ReadCloser, err error) {
 	name := c.userIdFunc(email)
 	if (name == "eee"){
-		return nil, fmt.Errorf("got a non 200 status code: %v", 400)
+		return nil, fmt.Errorf("User Does Not Exist,StatusCode = %v", 404)
 	}
 	req, err := http.NewRequest(method, fmt.Sprintf("https://demo.docusign.net/restapi/v2.1/accounts/%s/users/%s",c.accountId,name), &body)
 	if err != nil {

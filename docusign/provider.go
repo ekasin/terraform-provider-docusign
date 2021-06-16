@@ -13,21 +13,25 @@ func Provider() *schema.Provider {
 				Type:        schema.TypeString,
 				Optional:    true,
 				Sensitive:   true,
+				DefaultFunc: schema.EnvDefaultFunc("DOCUSIGN_SECRET_KEY", ""),
 			},
 			"integrationkey": &schema.Schema{
 				Type:        schema.TypeString,
 				Optional:    true,
 				Sensitive:   true,
+				DefaultFunc: schema.EnvDefaultFunc("DOCUSIGN_INTEGRATION_KEY", ""),
 			},
 			"refreshtoken": &schema.Schema{
 				Type:        schema.TypeString,
 				Optional:    true,
 				Sensitive:   true,
+				DefaultFunc: schema.EnvDefaultFunc("DOCUSIGN_REFRESH_TOKEN", ""),
 			},
 			"accountid": &schema.Schema{
 				Type:        schema.TypeString,
 				Optional:    true,
 				Sensitive:   true,
+				DefaultFunc: schema.EnvDefaultFunc("DOCUSIGN_ACCOUNT_ID", ""),
 			},
 		},
 		ResourcesMap: map[string]*schema.Resource{

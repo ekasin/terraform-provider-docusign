@@ -47,7 +47,7 @@ import (
 		if strings.Contains(err.Error(), "not found") {
 			d.SetId("")
 		} else {
-			return fmt.Errorf("error finding Item with ID %s", userId)
+			return fmt.Errorf("user %s does not exist" , userId)
 		}
 	}
 	d.SetId(user.Email)
