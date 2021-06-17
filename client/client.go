@@ -124,7 +124,11 @@ func (c *Client) DeleteItem(email string) error {
 }
 
 func (c *Client) deletehttpRequest(email, method string, body bytes.Buffer) (closer io.ReadCloser, err error) {
-	data := fmt.Sprintf("{\"users\":[{\"userId\":\"%s\"}]}", c.userIdFunc(email))
+	name,err := userIdFunc(email,c.authToken,c.accountId)
+	if (err != nil){
+		return nil, err
+	}
+	data := fmt.Sprintf("{\"users\":[{\"userId\":\"%s\"}]}", name)
 	payload := strings.NewReader(data)
 	
 	req, err := http.NewRequest(method, fmt.Sprintf("https://demo.docusign.net/restapi/v2.1/accounts/%s/users",c.accountId), payload)
@@ -158,7 +162,11 @@ func (c *Client) UpdateItem(item *User) error {
 func (c *Client) updatehttpRequest(path,method string, body bytes.Buffer, item *User) (closer io.ReadCloser, err error) {
 	data := fmt.Sprintf("{\"email\":\"%s\",\"userName\":\"%s\",\"firstName\":\"%s\",\"lastName\":\"%s\",\"jobTitle\":\"%s\",\"company\":\"%s\"}",item.Email,item.FirstName+" "+item.LastName,item.FirstName,item.LastName,item.JobTitle,item.Company)
 	payload := strings.NewReader(data)
-	req, err := http.NewRequest(method, fmt.Sprintf("https://demo.docusign.net/restapi/v2.1/accounts/%s/users/%s",c.accountId,c.userIdFunc(item.Email)), payload)
+	name,err := userIdFunc(item.Email,c.authToken,c.accountId)
+	if (err != nil){
+		return nil, err
+	}
+	req, err := http.NewRequest(method, fmt.Sprintf("https://demo.docusign.net/restapi/v2.1/accounts/%s/users/%s",c.accountId,name), payload)
 	authtoken := "Bearer "+ c.authToken
 	req.Header.Add("Authorization", authtoken)
 	req.Header.Add("Accept", "application/json")
@@ -191,12 +199,14 @@ func (c *Client) GetUser(email string) (*User, error) {
 }
 
 func (c *Client) gethttpRequest(email string, method string, body bytes.Buffer) (closer io.ReadCloser, err error) {
-	name := c.userIdFunc(email)
-	if (name == "eee"){
-		return nil, fmt.Errorf("User Does Not Exist,StatusCode = %v", 404)
+	name,err := userIdFunc(email,c.authToken,c.accountId)
+	if (err != nil){
+		log.Println("[ERROR]: ", err)
+		return nil, err
 	}
 	req, err := http.NewRequest(method, fmt.Sprintf("https://demo.docusign.net/restapi/v2.1/accounts/%s/users/%s",c.accountId,name), &body)
 	if err != nil {
+		log.Println("[ERROR]: ", err)
 		return nil, err
 	}
 	authtoken := "Bearer "+ c.authToken
@@ -219,26 +229,41 @@ func (c *Client) gethttpRequest(email string, method string, body bytes.Buffer) 
 	return resp.Body, nil
 }
 
-func (c *Client) userIdFunc(email string) string {
-	req, err := http.NewRequest("GET", fmt.Sprintf("https://demo.docusign.net/restapi/v2.1/accounts/%s/users?email=%s",c.accountId,email), nil)
+func userIdFunc(email string,token string,accId string) (str string , err error) {
+	req, err := http.NewRequest("GET", fmt.Sprintf("https://demo.docusign.net/restapi/v2.1/accounts/%s/users?email=%s",accId,email), nil)
 	if err != nil {
-		fmt.Println("Error on response.\n[ERROR] -", err)
-		return "userid"
+		log.Println("[ERROR]: ", err)
+		return "",err
 	}
-	authtoken := "Bearer "+ c.authToken
+	authtoken := "Bearer "+ token
 	req.Header.Add("Authorization", authtoken)
 	req.Header.Add("Accept", "application/json")
 	client := &http.Client{}
 	resp, err := client.Do(req)
-	var country1 Country
-	body, err := ioutil.ReadAll(resp.Body)
-	err = json.Unmarshal([]byte(body), &country1)
 	if err != nil {
-		return "eee"
+		log.Println("[ERROR]: ",err)
+		return "", err
 	}
-	if len(country1.Users)==0 {
-        return "eee"
+	if resp.StatusCode >= 200 && resp.StatusCode <= 299 {
+		var country1 Country
+		body, err := ioutil.ReadAll(resp.Body)
+		err = json.Unmarshal([]byte(body), &country1)
+		if err != nil {
+			return "",err
+		}
+
+		if country1.Users == nil {
+			return "",err
+		}
+
+		if len(country1.Users)==0 {
+        	return "",err
+    	} else {
+        	return country1.Users[0].UserID ,nil
+    	}
     } else {
-        return country1.Users[0].UserID
+		log.Println("Broken Request")
+		return "", fmt.Errorf("Error : %v",Errors[resp.StatusCode] )
     }
+	
 }

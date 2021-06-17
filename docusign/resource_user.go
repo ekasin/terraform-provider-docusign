@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"regexp"
 	"context"
+	"strings"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 )
 
@@ -109,7 +110,13 @@ func resourceUserRead(ctx context.Context,d *schema.ResourceData, m interface{})
 	userId := d.Id()
 	user, err := apiClient.GetUser(userId)
 	if err != nil {
-		return diags
+		log.Println("[ERROR]: ",err)
+		if strings.Contains(err.Error(), "not found") {
+			d.SetId("")
+			return diags
+		} else {
+			return diag.FromErr(err)
+		}
 	}
 	if len(user.Email) > 0{
 		d.SetId(user.Email)
