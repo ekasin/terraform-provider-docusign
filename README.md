@@ -118,10 +118,10 @@ output "user1" {
 
 ## Argument Reference
 
-* `secretkey`(Required,string)     - The Docusing secret Key from created application
-* `integrationkey`(Required,string)  - The Docusing integration Key from created application
-* `refreshtoken`(Required,string)      - refresh token for generation of new access token.
-* `accountid`(Required,string)      - Account id of the Admin.
+* `secretkey`(Required,string)     - The Docusing secret Key from created application (Set DOCUSIGN_SECRET_KEY environment variable)
+* `integrationkey`(Required,string)  - The Docusing integration Key from created application (Set DOCUSIGN_INTEGRATION_KEY environment variable)
+* `refreshtoken`(Required,string)      - refresh token for generation of new access token.(Set DOCUSIGN_REFRESH_TOKEN environment variable)
+* `accountid`(Required,string)      - Account id of the Admin. (Set DOCUSIGN_ACCOUNT_ID environment variable)
 * `first_name`(Required,string) - First name of the User.
 * `last_name`(Required,string)  - Last Name / Family Name / Surname of the User.
 * `job_title`(Optional,string)         - Job title of the particular user.
