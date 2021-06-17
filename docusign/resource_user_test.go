@@ -14,11 +14,11 @@ func TestAccItem_Basic(t *testing.T) {
 			{
 				Config: testAccCheckItemBasic(),
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("docusign_user.user1", "email", ""),
-					resource.TestCheckResourceAttr("docusign_user.user1", "firstname", ""),
-					resource.TestCheckResourceAttr("docusign_user.user1", "lastname", ""),
-					resource.TestCheckResourceAttr("docusign_user.user1", "jobtitle", ""),
-					resource.TestCheckResourceAttr("docusign_user.user1", "company", ""),
+					resource.TestCheckResourceAttr("docusign_user.user1", "email", "demo@gmail.com"),
+					resource.TestCheckResourceAttr("docusign_user.user1", "firstname", "demoname"),
+					resource.TestCheckResourceAttr("docusign_user.user1", "lastname", "singh"),
+					resource.TestCheckResourceAttr("docusign_user.user1", "jobtitle", "manager"),
+					resource.TestCheckResourceAttr("docusign_user.user1", "company", "demovalue"),
 				),
 			},
 		},
@@ -28,15 +28,14 @@ func TestAccItem_Basic(t *testing.T) {
 func testAccCheckItemBasic() string {
 	return fmt.Sprintf(`
 resource "docusign_user" "user1" {
-  email        = ""
-  firstname   = ""
-  lastname    = ""
-  jobtitle   = ""
-  company    = ""
+  email        = "demo@gmail.com"
+  firstname   = "demoname"
+  lastname    = "singh"
+  jobtitle   = "manager"
+  company    = "demovalue"
 }
 `)
 }
-
 
 func TestAccItem_Update(t *testing.T) {
 	resource.Test(t, resource.TestCase{
@@ -46,21 +45,21 @@ func TestAccItem_Update(t *testing.T) {
 			{
 				Config: testAccCheckItemUpdatePre(),
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("docusign_user.user1", "email", ""),
-					resource.TestCheckResourceAttr("docusign_user.user1", "firstname", ""),
-					resource.TestCheckResourceAttr("docusign_user.user1", "lastname", ""),
-					resource.TestCheckResourceAttr("docusign_user.user1", "jobtitle", ""),
-					resource.TestCheckResourceAttr("docusign_user.user1", "company", ""),	
+					resource.TestCheckResourceAttr("docusign_user.user1", "email", "demo@gmail.com"),
+					resource.TestCheckResourceAttr("docusign_user.user1", "firstname", "demoname"),
+					resource.TestCheckResourceAttr("docusign_user.user1", "lastname", "singh"),
+					resource.TestCheckResourceAttr("docusign_user.user1", "jobtitle", "manager"),
+					resource.TestCheckResourceAttr("docusign_user.user1", "company", "demovalue"),	
 				),
 			},
 			{
 				Config: testAccCheckItemUpdatePost(),
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("docusign_user.user1", "email", ""),
-					resource.TestCheckResourceAttr("docusign_user.user1", "firstname", ""),
-					resource.TestCheckResourceAttr("docusign_user.user1", "lastname", ""),
-					resource.TestCheckResourceAttr("docusign_user.user1", "jobtitle", ""),
-					resource.TestCheckResourceAttr("docusign_user.user1", "company", ""),
+					resource.TestCheckResourceAttr("docusign_user.user1", "email", "demo@gmail.com"),
+					resource.TestCheckResourceAttr("docusign_user.user1", "firstname", "demoname"),
+					resource.TestCheckResourceAttr("docusign_user.user1", "lastname", "singh"),
+					resource.TestCheckResourceAttr("docusign_user.user1", "jobtitle", "manager"),
+					resource.TestCheckResourceAttr("docusign_user.user1", "company", "demovalue"),
 				),
 			},
 		},
@@ -70,11 +69,11 @@ func TestAccItem_Update(t *testing.T) {
 func testAccCheckItemUpdatePre() string {
 	return fmt.Sprintf(`
 resource "docusign_user" "user1" {
-	email        = ""
-	firstname   = ""
-	lastname    = ""
-	jobtitle   = ""
-	company    = ""
+	email        = "demo@gmail.com"
+	firstname   = "demoname"
+	lastname    = "singh"
+	jobtitle   = "manager"
+	company    = "demovalue"
 }
 `)
 }
@@ -82,11 +81,11 @@ resource "docusign_user" "user1" {
 func testAccCheckItemUpdatePost() string {
 	return fmt.Sprintf(`
 resource "docusign_user" "user1" {
-	email        = ""
-	firstname   = ""
-	lastname    = ""
-	jobtitle   = ""
-	company    = ""
+	email        = "demo@gmail.com"
+	firstname   = "demoname"
+	lastname    = "singh"
+	jobtitle   = "manager"
+	company    = "demovalue"
 }
 `)
 }

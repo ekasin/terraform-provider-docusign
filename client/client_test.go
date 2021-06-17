@@ -4,7 +4,13 @@ import(
 	"github.com/stretchr/testify/assert"
 	"testing"
 	"log"
+	"os"
 )
+
+func init() {
+	os.Setenv("DOCUSIGN_TOKEN", "demovalue")
+	os.Setenv("DOCUSIGN_ACCOUNT_ID","demovalue")
+}
 
 func TestClient_GetItem(t *testing.T) {
 	testCases := []struct {
@@ -20,20 +26,20 @@ func TestClient_GetItem(t *testing.T) {
 			seedData: map[string]User{
 				"user@gmail.com": {
 					Email:   "user@gmail.com",
-					FirstName: "ekansh",
+					FirstName: "demoname",
 					LastName: "singh",
 					JobTitle: "manager",
-					Company: "clevertap",
+					Company: "democompany",
 					PermissionProfileName: "DocuSign Sender",
 				},
 			},
 			expectErr: false,
 			expectedResp: &User{
 					Email:   "user@gmail.com",
-					FirstName: "ekansh",
+					FirstName: "demoname",
 					LastName: "singh",
 					JobTitle: "manager",
-					Company: "clevertap",
+					Company: "democompany",
 					PermissionProfileName: "",
 			},
 		},
@@ -49,7 +55,7 @@ func TestClient_GetItem(t *testing.T) {
 	}
 	for _, tc := range testCases {
 		t.Run(tc.testName, func(t *testing.T) {
-			client := NewClient("TOKEN","ACCOUNTID")
+			client := NewClient(os.Getenv("DOCUSIGN_TOKEN"),os.Getenv("DOCUSIGN_ACCOUNT_ID"))
 
 			item, err := client.GetUser(tc.itemName)
 			if tc.expectErr {
@@ -73,10 +79,10 @@ func TestClient_NewItem(t *testing.T) {
 			testName: "success",
 			newItem: &User{
 					Email:   "user@gmail.com",
-					FirstName: "ekansh",
+					FirstName: "demoname",
 					LastName: "singh",
 					JobTitle: "manager",
-					Company: "clevertap",
+					Company: "democompany",
 					PermissionProfileName: "",
 			},
 			seedData:  nil,
@@ -86,19 +92,19 @@ func TestClient_NewItem(t *testing.T) {
 			testName: "item already exists",
 			newItem: &User{
 					Email:   "user@gmail.com",
-					FirstName: "ekansh",
+					FirstName: "demoname",
 					LastName: "singh",
 					JobTitle: "manager",
-					Company: "clevertap",
+					Company: "democompany",
 					PermissionProfileName: "",
 			},
 			seedData: map[string]User{
 				"item1": {
 					Email:   "user@gmail.com",
-					FirstName: "ekansh",
+					FirstName: "demoname",
 					LastName: "singh",
 					JobTitle: "manager",
-					Company: "clevertap",
+					Company: "democompany",
 					PermissionProfileName: "DocuSign Sender",
 				},
 			},
@@ -108,7 +114,7 @@ func TestClient_NewItem(t *testing.T) {
 	}
 	for _, tc := range testCases {
 		t.Run(tc.testName, func(t *testing.T) {
-			client := NewClient("TOKEN","ACCOUNTID")
+			client := NewClient(os.Getenv("DOCUSIGN_TOKEN"),os.Getenv("DOCUSIGN_ACCOUNT_ID"))
 			err := client.NewItem(tc.newItem)
 			if tc.expectErr {
 				assert.Error(t, err)
@@ -132,19 +138,19 @@ func TestClient_UpdateItem(t *testing.T) {
 			testName: "item exists",
 			updatedItem: &User{
 				Email:   "user@gmail.com",
-				FirstName: "ekansh",
+				FirstName: "demoname",
 				LastName: "singh",
 				JobTitle: "manager",
-				Company: "clevertap",
+				Company: "democompany",
 				PermissionProfileName: "",
 			},
 			seedData: map[string]User{
 				"item1": {
 					Email:   "user@gmail.com",
-					FirstName: "ekansh",
+					FirstName: "demoname",
 					LastName: "singh",
 					JobTitle: "manager",
-					Company: "clevertap",
+					Company: "democompany",
 					PermissionProfileName: "",
 				},
 			},
@@ -153,11 +159,11 @@ func TestClient_UpdateItem(t *testing.T) {
 		{
 			testName: "item does not exist",
 			updatedItem: &User{
-					Email:   "ui17ec38@iitsurat.ac.in",
-					FirstName: "ekansh",
+					Email:   "demo@gmail.com",
+					FirstName: "demoname",
 					LastName: "singh",
 					JobTitle: "manager",
-					Company: "clevertap",
+					Company: "democompany",
 					PermissionProfileName: "",
 			},
 			seedData:  nil,
@@ -166,7 +172,7 @@ func TestClient_UpdateItem(t *testing.T) {
 	}
 	for _, tc := range testCases {
 		t.Run(tc.testName, func(t *testing.T) {
-			client := NewClient("TOKEN","ACCOUNTID")
+			client := NewClient(os.Getenv("DOCUSIGN_TOKEN"),os.Getenv("DOCUSIGN_ACCOUNT_ID"))
 			err := client.UpdateItem(tc.updatedItem)
 			if tc.expectErr {
 				assert.Error(t, err)
@@ -178,7 +184,6 @@ func TestClient_UpdateItem(t *testing.T) {
 		})
 	}
 }
-
 
 func TestClient_DeleteItem(t *testing.T) {
 	testCases := []struct {
@@ -193,10 +198,10 @@ func TestClient_DeleteItem(t *testing.T) {
 			seedData: map[string]User{
 				"user1": {
 					Email:   "user@gmail.com",
-					FirstName: "ekansh",
+					FirstName: "demoname",
 					LastName: "singh",
 					JobTitle: "manager",
-					Company: "clevertap",
+					Company: "democompany",
 					PermissionProfileName: "",
 				},
 			},
@@ -205,7 +210,7 @@ func TestClient_DeleteItem(t *testing.T) {
 	}
 	for _, tc := range testCases {
 		t.Run(tc.testName, func(t *testing.T) {
-			client := NewClient("TOKEN","ACCOUNTID")
+			client := NewClient(os.Getenv("DOCUSIGN_TOKEN"),os.Getenv("DOCUSIGN_ACCOUNT_ID"))
 			err := client.DeleteItem(tc.itemName)
 			if tc.expectErr {
 				log.Println("[DELETE ERROR]: ", err)

@@ -15,7 +15,7 @@ func TestAccUserDataSource_basic(t *testing.T) {
 				Config: testAccUserDataSourceConfig(),
 				Check: resource.ComposeAggregateTestCheckFunc(
 					resource.TestCheckResourceAttr(
-						"data.docusign_user.user1", "email", ""),
+						"data.docusign_user.user1", "email", "demo@gmail.com"),
 				),
 			},
 		},
@@ -25,14 +25,14 @@ func TestAccUserDataSource_basic(t *testing.T) {
 func testAccUserDataSourceConfig() string {
 	return fmt.Sprintf(`	  
 	resource "docusign_user" "user1" {
-		email        = ""
-		firstname   = ""
-		lastname    = ""
-		jobtitle   = ""
-  		company    = ""
+		email        = "demo@gmail.com"
+		firstname   = "demoname"
+		lastname    = "singh"
+		jobtitle   = "manager"
+  		company    = "democompany"
 	  }
 	data "docusign_user" "user1" {
-		email = ""
+		email = "demo@gmail.com"
 	}
 	`)
 }

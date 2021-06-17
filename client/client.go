@@ -1,16 +1,15 @@
 package client
 
 import(
-	"net/http"
-	"bytes"
-	"encoding/json"
-	"fmt"
 	"io"
-	"io/ioutil"
-	"strings"
+	"fmt"
 	"log"
 	"time"
-	"os"
+	"bytes"
+	"strings"
+	"net/http"
+	"io/ioutil"
+	"encoding/json"
 )
 
 type Client struct {
@@ -65,10 +64,6 @@ func init() {
 }
 
 func NewClient(token string,accountid string) *Client {
-	if token == ""{
-		token = os.Getenv("DOCUSIGN_TOKEN")
-		accountid = os.Getenv("DOCUSIGN_ACCOUNTID")
-	}
 	return &Client{
 		authToken:  token,
 		accountId:  accountid,
@@ -222,9 +217,9 @@ func (c *Client) gethttpRequest(email string, method string, body bytes.Buffer) 
 		respBody := new(bytes.Buffer)
 		_, err := respBody.ReadFrom(resp.Body)
 		if err != nil {
-			return nil, fmt.Errorf("got a non 200 status code: %v", resp.StatusCode)
+			return nil, fmt.Errorf("Error : %v",Errors[resp.StatusCode] )
 		}
-		return nil, fmt.Errorf("got a non 200 status code: %v - %s", resp.StatusCode, respBody.String())
+		return nil, fmt.Errorf("Error : %v ", Errors[resp.StatusCode])
 	}
 	return resp.Body, nil
 }
@@ -251,11 +246,9 @@ func userIdFunc(email string,token string,accId string) (str string , err error)
 		if err != nil {
 			return "",err
 		}
-
 		if country1.Users == nil {
 			return "",err
 		}
-
 		if len(country1.Users)==0 {
         	return "",err
     	} else {
@@ -266,4 +259,13 @@ func userIdFunc(email string,token string,accId string) (str string , err error)
 		return "", fmt.Errorf("Error : %v",Errors[resp.StatusCode] )
     }
 	
+}
+
+func (c *Client) IsRetry(err error) bool {
+	if err != nil {
+		if strings.Contains(err.Error(), "\"responseCode\":503")==true {
+			return true
+		}
+	}
+	return false
 }

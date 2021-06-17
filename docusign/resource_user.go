@@ -1,14 +1,15 @@
 package docusign
 
 import (
-	"terraform-provider-docusign/client"
-	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
-	"log"
 	"fmt"
+	"time"
 	"regexp"
 	"context"
 	"strings"
+	"terraform-provider-docusign/client"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 )
 
 func validateEmail(v interface{}, k string) (ws []string, es []error) {
@@ -80,7 +81,6 @@ func resourceUser() *schema.Resource {
 			},
 		},
 	}
-
 }
 
 func resourceUserCreate(ctx context.Context,d *schema.ResourceData, m interface{}) diag.Diagnostics {
@@ -94,9 +94,21 @@ func resourceUserCreate(ctx context.Context,d *schema.ResourceData, m interface{
 		Company: d.Get("company").(string),
 
 	}
-	err := apiClient.NewItem(&user)
+	var err error
+	retryErr := resource.Retry(2*time.Minute, func() *resource.RetryError {
+		if err = apiClient.NewItem(&user); err != nil {
+			if apiClient.IsRetry(err) {
+				return resource.RetryableError(err)
+			}
+			return resource.NonRetryableError(err)
+		}
+		return nil
+	})
+	if retryErr != nil {
+		time.Sleep(2 * time.Second)
+		return diag.FromErr(retryErr)
+	}
 	if err != nil {
-		log.Println("[ERROR]: ",err)
 		return diag.FromErr(err)
 	}
 	d.SetId(user.Email)
@@ -108,24 +120,31 @@ func resourceUserRead(ctx context.Context,d *schema.ResourceData, m interface{})
 	var diags diag.Diagnostics
 	apiClient := m.(*client.Client)
 	userId := d.Id()
-	user, err := apiClient.GetUser(userId)
-	if err != nil {
-		log.Println("[ERROR]: ",err)
-		if strings.Contains(err.Error(), "not found") {
+	retryErr := resource.Retry(2*time.Minute, func() *resource.RetryError {
+		user, err := apiClient.GetUser(userId)
+		if err != nil {
+			if apiClient.IsRetry(err) {
+				return resource.RetryableError(err)
+			}
+			return resource.NonRetryableError(err)
+		}
+		if len(user.Email) > 0{
+			d.SetId(user.Email)
+			d.Set("email", user.Email)
+			d.Set("firstname", user.FirstName)
+			d.Set("lastname", user.LastName)
+			d.Set("jobtitle", user.JobTitle)
+			d.Set("company", user.Company)
+			d.Set("permissionprofilename", user.PermissionProfileName)
+		}
+		return nil
+	})
+	if retryErr!=nil {
+		if strings.Contains(retryErr.Error(), "User Does Not Exist")==true {
 			d.SetId("")
 			return diags
-		} else {
-			return diag.FromErr(err)
 		}
-	}
-	if len(user.Email) > 0{
-		d.SetId(user.Email)
-		d.Set("email", user.Email)
-		d.Set("firstname", user.FirstName)
-		d.Set("lastname", user.LastName)
-		d.Set("jobtitle", user.JobTitle)
-		d.Set("company", user.Company)
-		d.Set("permissionprofilename", user.PermissionProfileName)
+		return diag.FromErr(retryErr)
 	}
 	return diags
 }
@@ -150,9 +169,21 @@ func resourceUserUpdate(ctx context.Context,d *schema.ResourceData, m interface{
 		JobTitle: d.Get("jobtitle").(string),
 		Company: d.Get("company").(string),
 	}
-	err := apiClient.UpdateItem(&user)
+	var err error
+	retryErr := resource.Retry(2*time.Minute, func() *resource.RetryError {
+		if err = apiClient.UpdateItem(&user); err != nil {
+			if apiClient.IsRetry(err) {
+				return resource.RetryableError(err)
+			}
+			return resource.NonRetryableError(err)
+		}
+		return nil
+	})
+	if retryErr != nil {
+		time.Sleep(2 * time.Second)
+		return diag.FromErr(retryErr)
+	}
 	if err != nil {
-		log.Printf("[Error] Error updating user :%s", err)
 		return diag.FromErr(err)
 	}
 	return resourceUserRead(ctx,d,m)
@@ -162,9 +193,21 @@ func resourceUserDelete(ctx context.Context,d *schema.ResourceData, m interface{
 	var diags diag.Diagnostics
 	apiClient := m.(*client.Client)
 	userId := d.Id()
-	err := apiClient.DeleteItem(userId)
+	var err error
+	retryErr := resource.Retry(2*time.Minute, func() *resource.RetryError {
+		if err = apiClient.DeleteItem(userId); err != nil {
+			if apiClient.IsRetry(err) {
+				return resource.RetryableError(err)
+			}
+			return resource.NonRetryableError(err)
+		}
+		return nil
+	})
+	if retryErr != nil {
+		time.Sleep(2 * time.Second)
+		return diag.FromErr(retryErr)
+	}
 	if err != nil {
-		log.Printf("[Error] Error deleting user :%s", err)
 		return diag.FromErr(err)
 	}
 	d.SetId("")
