@@ -59,7 +59,7 @@ Otherwise you can manually move the file from current directory to destination d
 ## Working with terraform
 
 #### Create User
-1. Add the user email, first name, last name, job_title, company in the respective field in resourcse block[refer example usage](#example-usage)
+1. Add the user email, first name, last name, job_title, company in the respective field in resourcse block [refer example usage](#example-usage)
 2. Initialize the terraform provider `terraform init`
 3. Check the changes applicable using `terraform plan` and apply using `terraform apply`
 4. You will see that a user has been successfully created and an account activation mail has been sent to the user.
@@ -118,10 +118,10 @@ output "user1" {
 
 ## Argument Reference
 
-* `secretkey`(Required, String)       - The Docusing secret Key from created application (Set DOCUSIGN_SECRET_KEY environment variable)
-* `integrationkey`(Required, String)  - The Docusing integration Key from created application (Set DOCUSIGN_INTEGRATION_KEY environment variable)
-* `refreshtoken`(Required, String)    - refresh token for generation of new access token.(Set DOCUSIGN_REFRESH_TOKEN environment variable)
-* `accountid`(Required, String)       - Account id of the Admin. (Set DOCUSIGN_ACCOUNT_ID environment variable)
+* `secretkey`(Required, String)       - The Docusing secret Key from created application. This may also be set via the "DOCUSIGN_SECRET_KEY" environment variable.
+* `integrationkey`(Required, String)  - The Docusing integration Key from created application. This may also be set via the "DOCUSIGN_INTEGRATION_KEY" environment variable.
+* `refreshtoken`(Required, String)    - refresh token for generation of new access token. This may also be set via the "DOCUSIGN_REFRESH_TOKEN" environment variable.
+* `accountid`(Required, String)       - Account id of the Admin. This may also be set via the "DOCUSIGN_ACCOUNT_ID" environment variable.
 * `first_name`(Required, String)      - First name of the User.
 * `last_name`(Required, String)       - Last Name / Family Name / Surname of the User.
 * `job_title`(Optional, String)       - Job title of the particular user.
