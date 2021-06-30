@@ -11,7 +11,7 @@ This terraform provider allows to perform Create ,Read ,Update, Delete and Impor
 
 
 ## Application Setup
- :heavy_exclamation_mark:  [IMPORTANT] : This provider can be successfully tested on any dcosign developer account. <br><br>
+ ***This provider can be successfully tested on any dcosign developer account.*** <br><br>
 
 1. Create a docusign account with your required subscription (PRO Plan/Business Account). (https://www.docusign.com/products-and-pricing)<br>
 2. Sign in to the docusign account (https://developers.docusign.com/)<br>
@@ -59,7 +59,7 @@ Otherwise you can manually move the file from current directory to destination d
 ## Working with terraform
 
 #### Create User
-1. Add the user email, first name, last name, job_title, company in the respective field in resourcse block(refer example usage)
+1. Add the user email, first name, last name, job_title, company in the respective field in resourcse block[refer example usage](#example-usage)
 2. Initialize the terraform provider `terraform init`
 3. Check the changes applicable using `terraform plan` and apply using `terraform apply`
 4. You will see that a user has been successfully created and an account activation mail has been sent to the user.
@@ -81,7 +81,7 @@ Delete the resource block of the particular user file and run `terraform apply` 
 3. Check for the attributes in the `.tfstate` file and fill them accordingly in resource block.
 
 
-## Example Usage
+## Example Usage <a id="example-usage"></a>
 ```terraform
 terraform {
   required_providers {
@@ -118,13 +118,13 @@ output "user1" {
 
 ## Argument Reference
 
-* `secretkey`(Required,string)     - The Docusing secret Key from created application (Set DOCUSIGN_SECRET_KEY environment variable)
-* `integrationkey`(Required,string)  - The Docusing integration Key from created application (Set DOCUSIGN_INTEGRATION_KEY environment variable)
-* `refreshtoken`(Required,string)      - refresh token for generation of new access token.(Set DOCUSIGN_REFRESH_TOKEN environment variable)
-* `accountid`(Required,string)      - Account id of the Admin. (Set DOCUSIGN_ACCOUNT_ID environment variable)
-* `first_name`(Required,string) - First name of the User.
-* `last_name`(Required,string)  - Last Name / Family Name / Surname of the User.
-* `job_title`(Optional,string)         - Job title of the particular user.
-* `company`(Optional,string)         - Company of the particular user.
-* `permissionprofilename`(Computed,string)  - profile of the particular user ie.(DS Admin,DS Sender,DS Viewer)Can be managed only through docusign dashboard.
+* `secretkey`(Required, String)       - The Docusing secret Key from created application (Set DOCUSIGN_SECRET_KEY environment variable)
+* `integrationkey`(Required, String)  - The Docusing integration Key from created application (Set DOCUSIGN_INTEGRATION_KEY environment variable)
+* `refreshtoken`(Required, String)    - refresh token for generation of new access token.(Set DOCUSIGN_REFRESH_TOKEN environment variable)
+* `accountid`(Required, String)       - Account id of the Admin. (Set DOCUSIGN_ACCOUNT_ID environment variable)
+* `first_name`(Required, String)      - First name of the User.
+* `last_name`(Required, String)       - Last Name / Family Name / Surname of the User.
+* `job_title`(Optional, String)       - Job title of the particular user.
+* `company`(Optional, String)         - Company of the particular user.
+* `permissionprofilename`(computed, String)  - profile of the particular user ie.(DS Admin,DS Sender,DS Viewer)Can be managed only through docusign dashboard.
 

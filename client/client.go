@@ -263,7 +263,7 @@ func userIdFunc(email string,token string,accId string) (str string , err error)
 
 func (c *Client) IsRetry(err error) bool {
 	if err != nil {
-		if strings.Contains(err.Error(), "\"responseCode\":503")==true {
+		if strings.Contains(err.Error(), "429")==true {
 			return true
 		}
 	}
